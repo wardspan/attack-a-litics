@@ -1,0 +1,1 @@
+"""Attack-a-litics backend application."""
