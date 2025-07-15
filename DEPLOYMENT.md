@@ -319,9 +319,10 @@ async headers() {
    - **Command**: `railway up` (from root directory, not backend subdirectory)
 
 2. **Vercel Experimental Features Warning**
-   - **Error**: `Experiments (use at your own risk)` warning during build
-   - **Solution**: Experimental features are commented out in `next.config.js` for production stability
-   - **Note**: Features like `optimizePackageImports` and `scrollRestoration` are disabled for reliable deployment
+   - **Error**: `Experiments (use at your own risk)` warning during build showing `scrollRestoration`
+   - **Solution**: Experimental features are explicitly disabled with `experimental: {}` in `next.config.js`
+   - **Note**: Next.js may still show warnings for default experimental features; these are safe to ignore
+   - **Status**: Build will continue successfully despite warnings
 
 3. **CORS Errors**
    - **Error**: Cross-origin request blocked
