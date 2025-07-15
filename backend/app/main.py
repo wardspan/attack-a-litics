@@ -5,6 +5,7 @@ FastAPI backend for solving Lotka-Volterra cyber conflict dynamics
 
 import logging
 from datetime import datetime
+import asyncio
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -99,8 +100,14 @@ async def simulate_cyber_warfare(request: SimulationRequest):
         model = CyberWarfareModel(request)
         model.validate_parameters()
         
-        # Solve the system
-        result = model.solve()
+        # Solve the system with timeout
+        try:
+            result = await asyncio.wait_for(
+                asyncio.to_thread(model.solve),
+                timeout=60.0  # 60 second timeout
+            )
+        except asyncio.TimeoutError:
+            raise ValueError("Simulation timed out - parameters may be causing numerical instability or infinite loops")
         
         logger.info(f"Simulation completed successfully. Stability: {result['stability']}")
         

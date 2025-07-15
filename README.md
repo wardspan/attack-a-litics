@@ -283,6 +283,16 @@ The application includes comprehensive export capabilities:
 - **Image Export**: High-quality PNG and SVG visualizations
 - **Educational Reports**: Formatted reports with insights and recommendations
 
+### Analytics and Monitoring
+
+The application includes built-in analytics powered by Vercel Analytics:
+
+- **Page Views**: Automatic tracking of page visits and user sessions
+- **User Interactions**: Custom tracking for simulation runs, scenario selections, and tour completions
+- **Export Analytics**: Monitoring of data export usage (Excel, CSV, image downloads)
+- **Performance Metrics**: Real-time performance monitoring and error tracking
+- **Privacy-Focused**: No personal data collection, only aggregated usage statistics
+
 ### Mathematical Rendering
 
 Equations are rendered using KaTeX for professional mathematical notation:

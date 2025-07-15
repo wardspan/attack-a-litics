@@ -41,6 +41,8 @@ const OptimizedPlot = memo(({
       width: 1200,
       scale: 2
     },
+    // Fix Canvas performance warning
+    plotGlPixelRatio: 2,
     ...config
   }), [config]);
 

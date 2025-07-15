@@ -35,6 +35,9 @@ import { simulateSystem, checkBackendHealth } from '../utils/api';
 import { DEFAULT_PARAMETERS, LOADING_STATES } from '../utils/constants';
 import { SCENARIO_PRESETS } from '../utils/scenarioPresets';
 
+// Analytics
+import { track } from '@vercel/analytics';
+
 export default function Home() {
   const [parameters, setParameters] = useState(DEFAULT_PARAMETERS);
   const [simulationData, setSimulationData] = useState(null);
@@ -96,6 +99,13 @@ export default function Home() {
   const handleScenarioLoad = useCallback((scenario) => {
     setCurrentScenario(scenario);
     setParameters(scenario.parameters);
+    
+    // Track scenario selection
+    track('scenario_selected', {
+      scenarioName: scenario.name,
+      expectedOutcome: scenario.expectedOutcome,
+      timeSpan: scenario.parameters.time_span
+    });
   }, []);
 
   const handleReset = useCallback(() => {
@@ -110,24 +120,57 @@ export default function Home() {
     setLoadingState(LOADING_STATES.LOADING);
     setError(null);
     
+    // Track simulation start
+    track('simulation_started', {
+      solver: parameters.solver_method,
+      timeSpan: parameters.time_span,
+      scenario: currentScenario?.name || 'custom'
+    });
+    
     try {
       const result = await simulateSystem(parameters);
       
       if (result.success) {
         setSimulationData(result.data);
         setLoadingState(LOADING_STATES.SUCCESS);
+        
+        // Track successful simulation
+        track('simulation_completed', {
+          solver: parameters.solver_method,
+          timeSpan: parameters.time_span,
+          scenario: currentScenario?.name || 'custom',
+          stability: result.data.stability,
+          dataPoints: result.data.metadata?.data_points
+        });
       } else {
         setError(result.error);
         setLoadingState(LOADING_STATES.ERROR);
+        
+        // Track simulation failure
+        track('simulation_failed', {
+          solver: parameters.solver_method,
+          error: result.error
+        });
       }
     } catch (err) {
       setError('An unexpected error occurred during simulation');
       setLoadingState(LOADING_STATES.ERROR);
+      
+      // Track unexpected error
+      track('simulation_error', {
+        error: err.message
+      });
     }
-  }, [parameters]);
+  }, [parameters, currentScenario]);
 
   const handleTourComplete = useCallback((scenarioId) => {
     markUserAsVisited();
+    
+    // Track tour completion
+    track('tour_completed', {
+      completedScenario: scenarioId || 'none'
+    });
+    
     if (scenarioId && SCENARIO_PRESETS[scenarioId]) {
       handleScenarioLoad(SCENARIO_PRESETS[scenarioId]);
     }

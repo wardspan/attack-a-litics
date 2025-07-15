@@ -10,6 +10,11 @@
   html {
     scroll-behavior: smooth;
   }
+  
+  /* Fix Plotly Canvas performance warning */
+  .plotly-graph-div canvas {
+    will-read-frequently: true;
+  }
 }
 
 @layer components {

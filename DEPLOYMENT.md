@@ -226,6 +226,12 @@ This guide provides step-by-step instructions for deploying Attack-a-litics to p
    - Plotly.js and KaTeX are automatically split
    - Use dynamic imports for heavy components
 
+4. **Analytics Integration**
+   - **Vercel Analytics**: Automatically enabled when deployed on Vercel
+   - **Custom Event Tracking**: Built-in tracking for simulations, exports, and user interactions
+   - **Performance Monitoring**: Real-time performance metrics and error tracking
+   - **Privacy-Compliant**: No personal data collection, GDPR-friendly analytics
+
 ### 2. Backend Optimizations
 
 1. **Caching**

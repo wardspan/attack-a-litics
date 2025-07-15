@@ -1,5 +1,6 @@
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { track } from '@vercel/analytics';
 
 // Export simulation data to Excel format
 export const exportToExcel = (simulationData, parameters, currentScenario) => {
@@ -106,6 +107,14 @@ export const exportToExcel = (simulationData, parameters, currentScenario) => {
   const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
   saveAs(blob, filename);
   
+  // Track Excel export
+  track('data_exported', {
+    format: 'excel',
+    scenario: currentScenario?.name || 'custom',
+    dataPoints: simulationData.metadata?.data_points,
+    filename: filename
+  });
+  
   return { success: true, filename };
 };
 
@@ -183,6 +192,13 @@ export const exportToCSV = (simulationData, dataType = 'timeSeries') => {
   const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
   saveAs(blob, filename);
   
+  // Track CSV export
+  track('data_exported', {
+    format: 'csv',
+    dataType: dataType,
+    filename: filename
+  });
+  
   return { success: true, filename };
 };
 
@@ -204,6 +220,12 @@ export const exportVisualizationImage = (plotlyElement, filename, format = 'png'
         height: 800,
         filename: fullFilename
       }).then(() => {
+        // Track image export
+        track('data_exported', {
+          format: 'image',
+          imageFormat: format,
+          filename: fullFilename
+        });
         resolve({ success: true, filename: fullFilename });
       }).catch(reject);
     } catch (error) {

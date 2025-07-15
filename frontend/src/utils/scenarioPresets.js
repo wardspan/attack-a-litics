@@ -50,30 +50,30 @@ export const SCENARIO_PRESETS = {
     description: "Sophisticated, long-term attack campaign with adaptive adversary",
     educational: "APTs are characterized by persistent, stealthy attacks that adapt to defenses. This scenario shows how a well-resourced attacker can maintain presence despite defensive efforts.",
     parameters: {
-      conflictIntensity: 0.8,
+      conflictIntensity: 0.7,
       defenderAdvantage: 0.3,
       systemResilience: 0.4,
       
       alpha: 0.08,   // Slower defender growth
-      beta: 0.04,    // Strong attacker impact on defenders
-      gamma: 0.12,   // High attacker growth rate
-      delta: 0.025,  // Vulnerabilities significantly impact defenders
-      epsilon: 0.03, // Attackers exploit vulnerabilities well
-      eta: 0.015,    // Defenders struggle against attackers
-      theta: 0.05,   // Attackers create many vulnerabilities
-      lambda: 0.03,  // Slower vulnerability mitigation
-      mu: 0.01,      // Vulnerabilities persist longer
-      nu: 0.03,      // Moderate intelligence generation
-      xi: 0.04,      // Intelligence decays quickly (attacker adaptation)
-      rho: 0.015,    // Limited intelligence-defender synergy
-      sigma: 0.02,   // Moderate intelligence effectiveness
+      beta: 0.035,   // Strong attacker impact on defenders (reduced for stability)
+      gamma: 0.11,   // High attacker growth rate (reduced for stability)
+      delta: 0.02,   // Vulnerabilities significantly impact defenders (reduced for stability)
+      epsilon: 0.025, // Attackers exploit vulnerabilities well (reduced for stability)
+      eta: 0.02,     // Defenders struggle against attackers (increased for stability)
+      theta: 0.04,   // Attackers create many vulnerabilities (reduced for stability)
+      lambda: 0.035, // Slower vulnerability mitigation (increased for stability)
+      mu: 0.015,     // Vulnerabilities persist longer (increased for stability)
+      nu: 0.035,     // Moderate intelligence generation (increased for stability)
+      xi: 0.035,     // Intelligence decays quickly (reduced for stability)
+      rho: 0.02,     // Limited intelligence-defender synergy (increased for stability)
+      sigma: 0.025,  // Moderate intelligence effectiveness (increased for stability)
       
       x0: 80.0,      // Lower initial defender capability
       y0: 60.0,      // Higher initial attacker capability
-      z0: 45.0,      // More initial vulnerabilities
-      u0: 15.0,      // Limited initial intelligence
+      z0: 40.0,      // More initial vulnerabilities (reduced for stability)
+      u0: 18.0,      // Limited initial intelligence (increased for stability)
       
-      time_span: 48.0,
+      time_span: 36.0, // Reduced time span for stability
       resolution: 0.1,
       solver_method: 'RK45'
     },
@@ -170,28 +170,28 @@ export const SCENARIO_PRESETS = {
     description: "Scenario where defensive measures fail and attackers dominate",
     educational: "This shows what happens when defensive measures are inadequate or poorly implemented, leading to attacker dominance.",
     parameters: {
-      conflictIntensity: 0.9,
+      conflictIntensity: 0.8,
       defenderAdvantage: 0.2,
       systemResilience: 0.3,
       
-      alpha: 0.05,   // Weak defender growth
-      beta: 0.06,    // Attackers severely impact defenders
-      gamma: 0.15,   // Strong attacker growth
-      delta: 0.04,   // Vulnerabilities severely weaken defenders
-      epsilon: 0.05, // Attackers exploit vulnerabilities very well
-      eta: 0.01,     // Defenders barely counter attackers
-      theta: 0.08,   // Many vulnerabilities created
-      lambda: 0.02,  // Poor vulnerability mitigation
-      mu: 0.005,     // Vulnerabilities persist
-      nu: 0.02,      // Poor intelligence generation
-      xi: 0.06,      // Intelligence decays rapidly
-      rho: 0.005,    // Minimal intelligence-defender synergy
-      sigma: 0.005,  // Intelligence barely affects attackers
+      alpha: 0.06,   // Weak defender growth (slightly increased for stability)
+      beta: 0.04,    // Attackers impact defenders (reduced for stability)
+      gamma: 0.12,   // Strong attacker growth (reduced for stability)
+      delta: 0.03,   // Vulnerabilities weaken defenders (reduced for stability)
+      epsilon: 0.03, // Attackers exploit vulnerabilities well (reduced for stability)
+      eta: 0.015,    // Defenders barely counter attackers (increased for stability)
+      theta: 0.06,   // Many vulnerabilities created (reduced for stability)
+      lambda: 0.025, // Poor vulnerability mitigation (increased for stability)
+      mu: 0.015,     // Vulnerabilities persist (increased for stability)
+      nu: 0.025,     // Poor intelligence generation (increased for stability)
+      xi: 0.05,      // Intelligence decays rapidly (reduced for stability)
+      rho: 0.01,     // Minimal intelligence-defender synergy (increased for stability)
+      sigma: 0.01,   // Intelligence barely affects attackers (increased for stability)
       
-      x0: 60.0,      // Weak initial defenses
+      x0: 70.0,      // Weak initial defenses (increased for stability)
       y0: 80.0,      // Strong initial attacks
-      z0: 60.0,      // Many initial vulnerabilities
-      u0: 10.0,      // Minimal initial intelligence
+      z0: 50.0,      // Many initial vulnerabilities (reduced for stability)
+      u0: 15.0,      // Minimal initial intelligence (increased for stability)
       
       time_span: 24.0,
       resolution: 0.1,

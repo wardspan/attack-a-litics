@@ -70,6 +70,29 @@ class CyberWarfareModel:
         
         return [dx_dt, dy_dt, dz_dt, du_dt]
     
+    def _create_stability_events(self):
+        """
+        Create event functions to detect numerical instability.
+        
+        Returns:
+            List of event functions for solve_ivp
+        """
+        def explosion_event(t, state):
+            """Detect if any variable explodes to infinity"""
+            return 1e6 - max(abs(x) for x in state)
+        
+        def negative_event(t, state):
+            """Detect if any variable goes significantly negative"""
+            return min(state) + 1e-6
+        
+        explosion_event.terminal = True
+        explosion_event.direction = -1
+        
+        negative_event.terminal = True
+        negative_event.direction = -1
+        
+        return [explosion_event, negative_event]
+    
     def compute_jacobian(self, state: List[float]) -> np.ndarray:
         """
         Compute the 4x4 Jacobian matrix at the given state.
@@ -173,24 +196,39 @@ class CyberWarfareModel:
             
             logger.info(f"Starting simulation with {len(t_eval)} time points")
             
-            # Solve the ODE system
+            # Solve the ODE system with timeout and stability checks
             solution = solve_ivp(
                 self.differential_equations,
                 t_span,
                 initial_state,
                 t_eval=t_eval,
                 method=self.params.solver_method,
-                rtol=1e-8,
-                atol=1e-10,
-                max_step=self.params.resolution
+                rtol=1e-6,  # Slightly relaxed tolerance for stability
+                atol=1e-8,  # Slightly relaxed tolerance for stability
+                max_step=min(self.params.resolution, 0.5),  # Limit max step size
+                dense_output=False,
+                events=self._create_stability_events()
             )
             
             if not solution.success:
                 raise ValueError(f"ODE solver failed: {solution.message}")
             
+            # Check if simulation was terminated by stability events
+            if hasattr(solution, 't_events') and solution.t_events:
+                for i, event_times in enumerate(solution.t_events):
+                    if len(event_times) > 0:
+                        if i == 0:  # explosion_event
+                            raise ValueError("Simulation terminated due to numerical explosion - parameters may be causing instability")
+                        elif i == 1:  # negative_event
+                            raise ValueError("Simulation terminated due to negative values - parameters may be causing instability")
+            
             # Extract final state for stability analysis
             final_state = solution.y[:, -1]
             logger.info(f"Final state: x={final_state[0]:.3f}, y={final_state[1]:.3f}, z={final_state[2]:.3f}, u={final_state[3]:.3f}")
+            
+            # Check for NaN or infinite values
+            if np.any(np.isnan(final_state)) or np.any(np.isinf(final_state)):
+                raise ValueError("Simulation produced NaN or infinite values - parameters may be causing numerical instability")
             
             # Compute Jacobian matrix and eigenvalues at final state
             jacobian = self.compute_jacobian(final_state)
@@ -259,5 +297,20 @@ class CyberWarfareModel:
         
         if self.params.time_span / self.params.resolution > 10000:
             logger.warning("Very fine resolution may cause performance issues")
+        
+        # Check for extreme parameter ratios that can cause instability
+        if self.gamma / self.alpha > 10:
+            logger.warning("Attacker growth rate much higher than defender growth rate - may cause instability")
+        
+        if self.beta / self.eta > 10:
+            logger.warning("Defender-attacker interaction much higher than countermeasures - may cause instability")
+        
+        # Check for very low decay rates that can cause accumulation
+        if self.mu < 0.01:
+            logger.warning("Very low vulnerability decay rate may cause exponential growth")
+        
+        # Check for extreme initial condition ratios
+        if self.params.y0 / self.params.x0 > 5:
+            logger.warning("Initial attacker capability much higher than defender capability")
         
         return True

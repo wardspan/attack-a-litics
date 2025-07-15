@@ -12,6 +12,54 @@ import {
   Lightbulb
 } from 'lucide-react';
 
+// Simple markdown renderer fallback
+const SimpleMarkdownRenderer = ({ content }) => {
+  const renderContent = (text) => {
+    // Convert **text** to <strong>text</strong>
+    const withBold = text.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-semibold">$1</strong>');
+    // Convert - list items to proper list
+    const lines = withBold.split('\n');
+    const result = [];
+    
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (line.startsWith('- ')) {
+        // Start of list or continue list
+        if (result.length === 0 || !result[result.length - 1].includes('<ul>')) {
+          result.push('<ul class="list-disc list-inside space-y-1 my-2 text-gray-300">');
+        }
+        result.push(`<li class="text-gray-300">${line.substring(2)}</li>`);
+      } else if (line === '') {
+        // Empty line - close list if open
+        if (result.length > 0 && result[result.length - 1].includes('<li>')) {
+          result.push('</ul>');
+        }
+        result.push('<br />');
+      } else {
+        // Regular paragraph
+        if (result.length > 0 && result[result.length - 1].includes('<li>')) {
+          result.push('</ul>');
+        }
+        result.push(`<p class="mb-2 text-gray-300">${line}</p>`);
+      }
+    }
+    
+    // Close any open lists
+    if (result.length > 0 && result[result.length - 1].includes('<li>')) {
+      result.push('</ul>');
+    }
+    
+    return result.join('');
+  };
+  
+  return (
+    <div 
+      className="space-y-3"
+      dangerouslySetInnerHTML={{ __html: renderContent(content) }}
+    />
+  );
+};
+
 const GuidedTour = ({ isOpen, onClose, onStartSimulation }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
@@ -184,19 +232,8 @@ const GuidedTour = ({ isOpen, onClose, onStartSimulation }) => {
 
         {/* Content */}
         <div className="p-6">
-          <div className="text-gray-300 leading-relaxed prose prose-invert prose-sm max-w-none">
-            <ReactMarkdown
-              components={{
-                // Custom components for better styling
-                strong: ({ children }) => <strong className="text-white font-semibold">{children}</strong>,
-                em: ({ children }) => <em className="text-cyber-blue">{children}</em>,
-                ul: ({ children }) => <ul className="list-disc list-inside space-y-1 my-2">{children}</ul>,
-                li: ({ children }) => <li className="text-gray-300">{children}</li>,
-                p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
-              }}
-            >
-              {currentStepData.content}
-            </ReactMarkdown>
+          <div className="text-gray-300 leading-relaxed">
+            <SimpleMarkdownRenderer content={currentStepData.content} />
           </div>
         </div>
 
