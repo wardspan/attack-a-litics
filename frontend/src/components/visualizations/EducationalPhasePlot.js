@@ -140,29 +140,45 @@ const EducationalPhasePlot = ({
   const layout = useMemo(() => ({
     title: {
       text: '3D Phase Space Visualization',
-      font: { color: '#ffffff', size: 16 }
+      font: { 
+        color: '#ffffff', 
+        size: 16,
+        family: 'Inter, system-ui, sans-serif'
+      }
     },
     scene: {
       xaxis: {
-        title: VARIABLES[selectedAxes.x]?.name || selectedAxes.x,
+        title: { 
+          text: VARIABLES[selectedAxes.x]?.name || selectedAxes.x,
+          font: { size: 14, color: '#ffffff' }
+        },
         color: '#ffffff',
         gridcolor: '#374151',
         zeroline: false,
-        backgroundcolor: 'rgba(0,0,0,0)'
+        backgroundcolor: 'rgba(0,0,0,0)',
+        tickfont: { size: 11, color: '#ffffff' }
       },
       yaxis: {
-        title: VARIABLES[selectedAxes.y]?.name || selectedAxes.y,
+        title: { 
+          text: VARIABLES[selectedAxes.y]?.name || selectedAxes.y,
+          font: { size: 14, color: '#ffffff' }
+        },
         color: '#ffffff',
         gridcolor: '#374151',
         zeroline: false,
-        backgroundcolor: 'rgba(0,0,0,0)'
+        backgroundcolor: 'rgba(0,0,0,0)',
+        tickfont: { size: 11, color: '#ffffff' }
       },
       zaxis: {
-        title: VARIABLES[selectedAxes.z]?.name || selectedAxes.z,
+        title: { 
+          text: VARIABLES[selectedAxes.z]?.name || selectedAxes.z,
+          font: { size: 14, color: '#ffffff' }
+        },
         color: '#ffffff',
         gridcolor: '#374151',
         zeroline: false,
-        backgroundcolor: 'rgba(0,0,0,0)'
+        backgroundcolor: 'rgba(0,0,0,0)',
+        tickfont: { size: 11, color: '#ffffff' }
       },
       bgcolor: 'rgba(0,0,0,0)',
       camera: {
@@ -171,34 +187,39 @@ const EducationalPhasePlot = ({
     },
     plot_bgcolor: 'rgba(0,0,0,0)',
     paper_bgcolor: 'rgba(0,0,0,0)',
-    font: { color: '#ffffff' },
+    font: { 
+      family: 'Inter, system-ui, sans-serif',
+      size: 12,
+      color: '#E5E7EB'
+    },
     legend: {
-      x: 0.02,
-      y: 0.98,
-      bgcolor: 'rgba(0,0,0,0.7)',
-      bordercolor: '#374151',
-      borderwidth: 1
+      x: 0,
+      y: 1,
+      bgcolor: 'rgba(0,0,0,0.8)',
+      bordercolor: 'rgba(255,255,255,0.2)',
+      borderwidth: 1,
+      font: { size: 12, color: '#ffffff' }
     },
     height: height,
-    margin: { l: 40, r: 40, t: 60, b: 40 }
+    margin: { l: 0, r: 0, t: 40, b: 0 }
   }), [selectedAxes, height]);
 
   const AxisSelector = () => (
-    <div className="space-y-3">
-      <h4 className="text-sm font-semibold text-cyber-green">
+    <div className="space-y-4">
+      <h3 className="text-lg font-semibold text-white mb-3">
         Select Variables for Axes
-      </h4>
+      </h3>
       
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {['x', 'y', 'z'].map(axis => (
           <div key={axis} className="space-y-2">
-            <label className="text-xs font-medium text-gray-300 uppercase block">
+            <label className="block text-sm text-gray-300 mb-2 font-medium uppercase">
               {axis}-axis
             </label>
             <select
               value={selectedAxes[axis]}
               onChange={(e) => setSelectedAxes(prev => ({ ...prev, [axis]: e.target.value }))}
-              className="w-full bg-gray-800 border border-gray-700 rounded px-2 py-1 text-sm text-white focus:border-cyber-blue focus:outline-none min-w-0"
+              className="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 text-white focus:border-cyber-blue focus:ring-1 focus:ring-cyber-blue transition-all duration-200 text-sm"
             >
               {Object.entries(VARIABLES).map(([key, variable]) => (
                 <option key={key} value={key}>
@@ -216,10 +237,10 @@ const EducationalPhasePlot = ({
     <div className="flex flex-wrap items-center gap-2">
       <button
         onClick={() => setShowTrajectory(!showTrajectory)}
-        className={`text-xs px-2 py-1 rounded transition-colors ${
+        className={`text-xs px-3 py-1.5 rounded-md transition-colors border ${
           showTrajectory 
-            ? 'bg-cyber-blue/20 text-cyber-blue' 
-            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+            ? 'bg-cyber-blue/20 text-cyber-blue border-cyber-blue/30' 
+            : 'bg-gray-700 text-gray-300 hover:bg-gray-600 border-gray-600'
         }`}
       >
         <RotateCcw size={12} className="inline mr-1" />
@@ -228,10 +249,10 @@ const EducationalPhasePlot = ({
       
       <button
         onClick={() => setShowPoints(!showPoints)}
-        className={`text-xs px-2 py-1 rounded transition-colors ${
+        className={`text-xs px-3 py-1.5 rounded-md transition-colors border ${
           showPoints 
-            ? 'bg-cyber-purple/20 text-cyber-purple' 
-            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+            ? 'bg-cyber-purple/20 text-cyber-purple border-cyber-purple/30' 
+            : 'bg-gray-700 text-gray-300 hover:bg-gray-600 border-gray-600'
         }`}
       >
         <Target size={12} className="inline mr-1" />
@@ -375,25 +396,27 @@ const EducationalPhasePlot = ({
   }
 
   return (
-    <div className={`card ${className}`}>
-      <div className="p-4 border-b border-gray-700">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+    <div className={`card ${className} phase-space-panel`} style={{ minWidth: '450px' }}>
+      <div className="p-6 border-b border-gray-700">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-cyber-purple/20 rounded-full flex items-center justify-center">
               <Compass size={16} className="text-cyber-purple" />
             </div>
             <div>
-              <h3 className="text-white font-semibold">Phase Space Visualization</h3>
+              <h3 className="text-white font-semibold text-lg panel-title">
+                3D Phase Space Visualization
+              </h3>
               <p className="text-sm text-gray-400">
                 3D trajectory of system evolution
               </p>
             </div>
           </div>
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-3">
             <ViewControls />
             <button
               onClick={() => setShowExplanation(!showExplanation)}
-              className="text-xs text-cyber-blue hover:text-cyber-blue/80 transition-colors whitespace-nowrap"
+              className="text-xs text-cyber-blue hover:text-cyber-blue/80 transition-colors whitespace-nowrap px-3 py-1.5 rounded-md border border-cyber-blue/30 hover:bg-cyber-blue/10"
             >
               {showExplanation ? 'Hide' : 'Show'} explanation
             </button>
@@ -401,18 +424,20 @@ const EducationalPhasePlot = ({
         </div>
       </div>
 
-      <div className="p-4">
-        <div className="mb-4">
+      <div className="p-6">
+        <div className="mb-6">
           <AxisSelector />
         </div>
         
         {data ? (
-          <Plot
-            data={plotData}
-            layout={layout}
-            config={PLOT_CONFIG}
-            style={{ width: '100%', height: '100%' }}
-          />
+          <div className="w-full" style={{ minHeight: '400px' }}>
+            <Plot
+              data={plotData}
+              layout={layout}
+              config={PLOT_CONFIG}
+              style={{ width: '100%', height: '100%' }}
+            />
+          </div>
         ) : (
           <div className="flex items-center justify-center h-64 text-gray-400">
             <div className="text-center">

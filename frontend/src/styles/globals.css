@@ -214,6 +214,73 @@
   @apply rounded-full bg-gray-700 animate-pulse;
 }
 
+/* Panel-specific styles */
+.phase-space-panel {
+  @apply min-w-0 max-w-full;
+}
+
+.mathematical-analysis-panel {
+  @apply min-w-0 max-w-full;
+}
+
+.panel-title {
+  @apply text-xl leading-relaxed;
+  word-wrap: break-word;
+}
+
+.value-display {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  @apply text-sm leading-relaxed;
+}
+
+.net-change-value {
+  @apply min-w-0 text-right;
+  white-space: nowrap;
+  overflow: visible;
+}
+
+.no-overflow {
+  overflow: visible;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+/* Main visualization grid responsive layout */
+.main-visualization-grid {
+  display: grid;
+  gap: 2rem;
+}
+
+/* Mobile: Stack everything vertically */
+@media (max-width: 768px) {
+  .main-visualization-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .phase-space-panel,
+  .mathematical-analysis-panel {
+    min-width: unset;
+    width: 100%;
+  }
+}
+
+/* Tablet: Maintain single column but with better spacing */
+@media (min-width: 769px) and (max-width: 1279px) {
+  .main-visualization-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+/* Desktop: Side-by-side with proper spacing */
+@media (min-width: 1280px) {
+  .main-visualization-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+}
+
 /* Print styles */
 @media print {
   .no-print {

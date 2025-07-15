@@ -217,7 +217,12 @@ backend/
 │   ├── solver/                 # Numerical solver
 │   └── utils/                  # Utility functions
 ├── requirements.txt
-└── Dockerfile
+└── Dockerfile                  # For local development
+
+# Root level files for deployment
+├── Dockerfile                  # Railway deployment
+├── railway.toml                # Railway configuration
+└── vercel.json                 # Vercel configuration
 ```
 
 ### Key Technologies

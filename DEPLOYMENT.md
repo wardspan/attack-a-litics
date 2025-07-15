@@ -27,8 +27,15 @@ This guide provides step-by-step instructions for deploying Attack-a-litics to p
 
 2. **Test Backend Locally**
    ```bash
+   # For local development, use the backend-specific Dockerfile
+   cd backend
    docker build -t attack-a-litics-backend .
    docker run -p 8000:8000 attack-a-litics-backend
+   
+   # For Railway deployment testing, use the root Dockerfile
+   cd ..
+   docker build -t railway-test -f Dockerfile .
+   docker run -p 8000:8000 railway-test
    ```
 
 ### 2. Deploy to Railway
@@ -45,12 +52,13 @@ This guide provides step-by-step instructions for deploying Attack-a-litics to p
 
 3. **Initialize Railway Project**
    ```bash
-   cd backend
+   # From the root directory (not backend subdirectory)
    railway init
    ```
 
 4. **Deploy Backend**
    ```bash
+   # Deploy from root directory - Railway will use the root Dockerfile
    railway up
    ```
 
@@ -305,17 +313,30 @@ async headers() {
 
 ### Common Issues
 
-1. **CORS Errors**
-   - Verify `CORS_ORIGINS` environment variable
-   - Check frontend URL is included in CORS origins
+1. **Railway Build Failures**
+   - **Error**: `/app: not found` or `/requirements.txt: not found`
+   - **Solution**: Ensure you're deploying from the root directory and using the root `Dockerfile`
+   - **Command**: `railway up` (from root directory, not backend subdirectory)
 
-2. **Build Failures**
-   - Check Node.js version compatibility
-   - Verify all dependencies are installed
+2. **CORS Errors**
+   - **Error**: Cross-origin request blocked
+   - **Solution**: Verify `CORS_ORIGINS` environment variable includes your frontend URL
+   - **Command**: `railway variables set CORS_ORIGINS=https://your-frontend-url.vercel.app`
 
-3. **Runtime Errors**
-   - Check browser console for JavaScript errors
-   - Verify API endpoints are accessible
+3. **Build Context Issues**
+   - **Error**: Docker build fails to find backend files
+   - **Solution**: Use the root `Dockerfile` which correctly references `backend/` paths
+   - **Local Test**: `docker build -t railway-test -f Dockerfile .`
+
+4. **Health Check Failures**
+   - **Error**: Railway shows service as unhealthy
+   - **Solution**: Ensure `/health` endpoint is accessible
+   - **Test**: `curl https://your-railway-url.railway.app/health`
+
+5. **Environment Variables**
+   - **Error**: Application fails to start or CORS issues
+   - **Solution**: Set required environment variables in Railway dashboard
+   - **Required**: `LOG_LEVEL=INFO`, `CORS_ORIGINS=https://your-frontend-url`
 
 ### Debug Commands
 

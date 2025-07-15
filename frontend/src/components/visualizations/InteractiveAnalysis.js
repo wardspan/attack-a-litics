@@ -85,27 +85,27 @@ const InteractiveAnalysis = ({
   };
 
   const SummaryTab = () => (
-    <div className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="space-y-3">
-          <h4 className="text-sm font-semibold text-cyber-green flex items-center gap-2">
-            <Target size={16} />
+          <h4 className="flex items-center gap-2 text-cyber-green font-semibold">
+            <span className="w-2 h-2 bg-cyber-green rounded-full"></span>
             Final State Values
           </h4>
           
           <div className="space-y-2">
             {Object.entries(VARIABLES).map(([key, variable]) => (
-              <div key={key} className="flex items-center justify-between p-2 bg-gray-800/50 rounded">
+              <div key={key} className="flex justify-between items-center p-3 bg-gray-800/50 rounded-lg">
                 <Tooltip content={variable.description}>
                   <div className="flex items-center gap-2">
                     <div 
                       className="w-3 h-3 rounded-full" 
                       style={{ backgroundColor: variable.color }}
                     />
-                    <span className="text-sm text-white">{variable.name}</span>
+                    <span className="text-sm text-gray-300">{variable.name}</span>
                   </div>
                 </Tooltip>
-                <span className="text-sm font-mono text-gray-300">
+                <span className="font-mono text-white font-medium text-sm">
                   {analysisData.finalValues[key].toFixed(2)}
                 </span>
               </div>
@@ -114,8 +114,8 @@ const InteractiveAnalysis = ({
         </div>
         
         <div className="space-y-3">
-          <h4 className="text-sm font-semibold text-cyber-blue flex items-center gap-2">
-            <Activity size={16} />
+          <h4 className="flex items-center gap-2 text-cyber-blue font-semibold">
+            <span className="w-2 h-2 bg-cyber-blue rounded-full"></span>
             Net Changes
           </h4>
           
@@ -126,21 +126,21 @@ const InteractiveAnalysis = ({
                                  change < 0 ? 'text-cyber-green' : 'text-gray-400';
               
               return (
-                <div key={key} className="flex items-center justify-between p-2 bg-gray-800/50 rounded">
+                <div key={key} className="flex justify-between items-center p-3 bg-gray-800/50 rounded-lg">
                   <Tooltip content={`Total change in ${variable.name} over simulation`}>
                     <div className="flex items-center gap-2">
                       <div 
                         className="w-3 h-3 rounded-full" 
                         style={{ backgroundColor: variable.color }}
                       />
-                      <span className="text-sm text-white">{variable.name}</span>
+                      <span className="text-sm text-gray-300">{variable.name}</span>
                     </div>
                   </Tooltip>
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-2">
                     {change > 0 ? <TrendingUp size={14} className="text-cyber-red" /> : 
                      change < 0 ? <TrendingDown size={14} className="text-cyber-green" /> : 
                      <div className="w-3 h-3 rounded-full bg-gray-400" />}
-                    <span className={`text-sm font-mono ${changeColor}`}>
+                    <span className={`font-mono font-medium text-sm ${changeColor} net-change-value`}>
                       {change > 0 ? '+' : ''}{change.toFixed(2)}
                     </span>
                   </div>
@@ -151,37 +151,38 @@ const InteractiveAnalysis = ({
         </div>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="p-4 bg-gray-800/50 rounded-lg">
-          <h4 className="text-sm font-semibold text-cyber-green mb-2">
-            Simulation Summary
-          </h4>
-          <div className="space-y-2 text-xs">
-            <div className="flex justify-between">
-              <span className="text-gray-400">Duration:</span>
-              <span className="text-white">{analysisData.metadata.simulation_time}h</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-400">Data Points:</span>
-              <span className="text-white">{analysisData.metadata.data_points}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-400">Solver:</span>
-              <span className="text-white">{analysisData.metadata.solver_method}</span>
-            </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-800/30 rounded-lg">
+        <div className="text-center">
+          <div className="text-sm text-gray-400 mb-1">Duration</div>
+          <div className="text-lg font-semibold text-white">
+            {analysisData.metadata.simulation_time}h
           </div>
         </div>
         
+        <div className="text-center">
+          <div className="text-sm text-gray-400 mb-1">Data Points</div>
+          <div className="text-lg font-semibold text-white">
+            {analysisData.metadata.data_points}
+          </div>
+        </div>
+        
+        <div className="text-center">
+          <div className="text-sm text-gray-400 mb-1">Solver</div>
+          <div className="text-lg font-semibold text-white">
+            {analysisData.metadata.solver_method}
+          </div>
+        </div>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="p-4 bg-gray-800/50 rounded-lg">
-          <h4 className="text-sm font-semibold text-cyber-blue mb-2">
+          <h4 className="text-sm font-semibold text-cyber-blue mb-3 flex items-center gap-2">
+            <span className="w-2 h-2 bg-cyber-blue rounded-full"></span>
             System Stability
           </h4>
           <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-cyber-blue rounded-full" />
-              <span className="text-sm text-white capitalize">
-                {analysisData.stability}
-              </span>
+            <div className="text-base text-white capitalize font-medium">
+              {analysisData.stability}
             </div>
             <div className="text-xs text-gray-400">
               Click the Stability tab for detailed analysis
@@ -190,11 +191,12 @@ const InteractiveAnalysis = ({
         </div>
         
         <div className="p-4 bg-gray-800/50 rounded-lg">
-          <h4 className="text-sm font-semibold text-cyber-purple mb-2">
+          <h4 className="text-sm font-semibold text-cyber-purple mb-3 flex items-center gap-2">
+            <span className="w-2 h-2 bg-cyber-purple rounded-full"></span>
             Dominant Eigenvalue
           </h4>
           <div className="space-y-2">
-            <div className="text-sm font-mono text-white">
+            <div className="text-base font-mono text-white font-medium">
               {analysisData.eigenvalues[0].toFixed(6)}
             </div>
             <div className="text-xs text-gray-400">
@@ -376,15 +378,15 @@ const InteractiveAnalysis = ({
   }
 
   return (
-    <div className={`card ${className}`}>
-      <div className="p-4 border-b border-gray-700">
-        <div className="flex items-center justify-between">
+    <div className={`card ${className} mathematical-analysis-panel`} style={{ minWidth: '500px' }}>
+      <div className="p-6 border-b border-gray-700">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-cyber-purple/20 rounded-full flex items-center justify-center">
               <BarChart3 size={16} className="text-cyber-purple" />
             </div>
             <div>
-              <h3 className="text-white font-semibold">Mathematical Analysis</h3>
+              <h3 className="text-white font-semibold text-lg panel-title">Mathematical Analysis</h3>
               <p className="text-sm text-gray-400">
                 Detailed system analysis and stability information
               </p>
@@ -392,10 +394,10 @@ const InteractiveAnalysis = ({
           </div>
           <button
             onClick={() => setShowTooltips(!showTooltips)}
-            className={`text-xs px-2 py-1 rounded transition-colors ${
+            className={`text-xs px-3 py-1.5 rounded-md transition-colors border ${
               showTooltips 
-                ? 'bg-cyber-blue/20 text-cyber-blue' 
-                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                ? 'bg-cyber-blue/20 text-cyber-blue border-cyber-blue/30' 
+                : 'bg-gray-700 text-gray-300 hover:bg-gray-600 border-gray-600'
             }`}
           >
             <HelpCircle size={12} className="inline mr-1" />
@@ -405,7 +407,7 @@ const InteractiveAnalysis = ({
       </div>
       
       <div className="border-b border-gray-700">
-        <div className="flex space-x-1 p-1">
+        <div className="flex space-x-1 p-2">
           {[
             { id: 'summary', label: 'Summary', icon: Info },
             { id: 'rates', label: 'Rates', icon: TrendingUp },
@@ -415,10 +417,10 @@ const InteractiveAnalysis = ({
             <button
               key={id}
               onClick={() => setActiveTab(id)}
-              className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 text-sm rounded transition-colors ${
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3 text-sm rounded-lg transition-colors border ${
                 activeTab === id
-                  ? 'bg-cyber-blue/20 text-cyber-blue'
-                  : 'text-gray-400 hover:text-gray-300'
+                  ? 'bg-cyber-blue/20 text-cyber-blue border-cyber-blue/30'
+                  : 'text-gray-400 hover:text-gray-300 border-transparent hover:bg-gray-800/50'
               }`}
             >
               <Icon size={16} />
@@ -428,7 +430,7 @@ const InteractiveAnalysis = ({
         </div>
       </div>
       
-      <div className="p-4">
+      <div className="p-6">
         {activeTab === 'summary' && <SummaryTab />}
         {activeTab === 'rates' && <RatesTab />}
         {activeTab === 'jacobian' && <JacobianTab />}

@@ -311,7 +311,7 @@ export default function Home() {
               </ErrorBoundary>
 
               {/* 3D Phase Plot and Analysis */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="main-visualization-grid grid grid-cols-1 xl:grid-cols-2 gap-8">
                 <ErrorBoundary fallbackMessage="Failed to load phase space visualization">
                   <EducationalPhasePlot
                     data={simulationData}
