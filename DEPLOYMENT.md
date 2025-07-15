@@ -125,6 +125,8 @@ This guide provides step-by-step instructions for deploying Attack-a-litics to p
    cd frontend
    vercel --prod
    ```
+   
+   **Note**: Deploy from the `frontend` directory, not the root directory
 
 4. **Set Environment Variables**
    ```bash
@@ -318,29 +320,35 @@ async headers() {
    - **Solution**: Ensure you're deploying from the root directory and using the root `Dockerfile`
    - **Command**: `railway up` (from root directory, not backend subdirectory)
 
-2. **Vercel Experimental Features Warning**
+2. **Vercel Output Directory Error**
+   - **Error**: `No Output Directory named "public" found after the Build completed`
+   - **Solution**: Deploy from the `frontend` directory, not the root directory
+   - **Command**: `cd frontend && vercel --prod`
+   - **Note**: Frontend has its own `vercel.json` configuration
+
+3. **Vercel Experimental Features Warning**
    - **Error**: `Experiments (use at your own risk)` warning during build showing `scrollRestoration`
    - **Solution**: Experimental features are explicitly disabled with `experimental: {}` in `next.config.js`
    - **Note**: Next.js may still show warnings for default experimental features; these are safe to ignore
    - **Status**: Build will continue successfully despite warnings
 
-3. **CORS Errors**
+4. **CORS Errors**
    - **Error**: Cross-origin request blocked
    - **Solution**: Verify `CORS_ORIGINS` environment variable includes your frontend URL
    - **Command**: `railway variables set CORS_ORIGINS=https://your-frontend-url.vercel.app`
 
-4. **Build Context Issues**
+5. **Build Context Issues**
    - **Error**: Docker build fails to find backend files
    - **Solution**: Use the root `Dockerfile` which correctly references `backend/` paths
    - **Local Test**: `docker build -t railway-test -f Dockerfile .`
 
-5. **Health Check Failures**
+6. **Health Check Failures**
    - **Error**: Railway shows service as unhealthy or stuck on network health checks
    - **Solution**: Health check timeout increased to 600s, uses Railway PORT variable
    - **Test**: `curl https://your-railway-url.railway.app/health`
    - **Debug**: Check Railway logs for startup issues: `railway logs`
 
-6. **Environment Variables**
+7. **Environment Variables**
    - **Error**: Application fails to start or CORS issues
    - **Solution**: Set required environment variables in Railway dashboard
    - **Required**: `LOG_LEVEL=INFO`, `CORS_ORIGINS=https://your-frontend-url`
