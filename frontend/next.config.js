@@ -70,11 +70,11 @@ const nextConfig = {
     ],
   },
   
-  // Experimental features for performance
-  experimental: {
-    optimizePackageImports: ['plotly.js', 'react-plotly.js'],
-    scrollRestoration: true,
-  },
+  // Experimental features for performance (removed for production stability)
+  // experimental: {
+  //   optimizePackageImports: ['plotly.js', 'react-plotly.js'],
+  //   scrollRestoration: true,
+  // },
   
   // Security headers
   async headers() {

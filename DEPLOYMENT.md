@@ -318,22 +318,28 @@ async headers() {
    - **Solution**: Ensure you're deploying from the root directory and using the root `Dockerfile`
    - **Command**: `railway up` (from root directory, not backend subdirectory)
 
-2. **CORS Errors**
+2. **Vercel Experimental Features Warning**
+   - **Error**: `Experiments (use at your own risk)` warning during build
+   - **Solution**: Experimental features are commented out in `next.config.js` for production stability
+   - **Note**: Features like `optimizePackageImports` and `scrollRestoration` are disabled for reliable deployment
+
+3. **CORS Errors**
    - **Error**: Cross-origin request blocked
    - **Solution**: Verify `CORS_ORIGINS` environment variable includes your frontend URL
    - **Command**: `railway variables set CORS_ORIGINS=https://your-frontend-url.vercel.app`
 
-3. **Build Context Issues**
+4. **Build Context Issues**
    - **Error**: Docker build fails to find backend files
    - **Solution**: Use the root `Dockerfile` which correctly references `backend/` paths
    - **Local Test**: `docker build -t railway-test -f Dockerfile .`
 
-4. **Health Check Failures**
-   - **Error**: Railway shows service as unhealthy
-   - **Solution**: Ensure `/health` endpoint is accessible
+5. **Health Check Failures**
+   - **Error**: Railway shows service as unhealthy or stuck on network health checks
+   - **Solution**: Health check timeout increased to 600s, uses Railway PORT variable
    - **Test**: `curl https://your-railway-url.railway.app/health`
+   - **Debug**: Check Railway logs for startup issues: `railway logs`
 
-5. **Environment Variables**
+6. **Environment Variables**
    - **Error**: Application fails to start or CORS issues
    - **Solution**: Set required environment variables in Railway dashboard
    - **Required**: `LOG_LEVEL=INFO`, `CORS_ORIGINS=https://your-frontend-url`
