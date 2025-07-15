@@ -1,0 +1,35 @@
+{
+  "name": "attack-a-litics-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for Attack-a-litics cyber warfare simulation",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "autoprefixer": "10.4.16",
+    "axios": "1.6.2",
+    "file-saver": "^2.0.5",
+    "katex": "^0.16.22",
+    "lucide-react": "0.294.0",
+    "next": "14.0.3",
+    "plotly.js": "2.27.1",
+    "postcss": "8.4.32",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-katex": "^3.1.0",
+    "react-plotly.js": "2.6.0",
+    "tailwindcss": "3.3.6",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "eslint": "8.54.0",
+    "eslint-config-next": "14.0.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

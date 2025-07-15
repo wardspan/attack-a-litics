@@ -1,101 +1,307 @@
-# Attack-a-litics
+# Attack-a-litics: Educational Cyber Warfare Simulation
 
-A cyber warfare simulation using Lotka-Volterra dynamics to model the interaction between defenders, attackers, system vulnerabilities, and threat intelligence.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Next.js](https://img.shields.io/badge/Next.js-14.0.3-black)](https://nextjs.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.104.1-009688)](https://fastapi.tiangolo.com/)
+[![Docker](https://img.shields.io/badge/Docker-Supported-blue)](https://www.docker.com/)
 
-## Overview
+An interactive educational platform for understanding cyber conflict dynamics through mathematical simulation. Attack-a-litics uses differential equations to model the complex interactions between attackers and defenders in cyberspace, making advanced cybersecurity concepts accessible through visualization and guided exploration.
 
-Attack-a-litics implements a mathematical model for cyber conflict dynamics using a system of 4 differential equations:
+## 🎯 What is Attack-a-litics?
 
-- **x(t)**: Defender Capability
-- **y(t)**: Attacker Capability  
-- **z(t)**: System Vulnerability
-- **u(t)**: Threat Intelligence
+Attack-a-litics is an educational simulation platform that models cyber warfare dynamics using the Lotka-Volterra differential equation system. It transforms complex mathematical concepts into interactive visualizations, helping cybersecurity professionals, students, and researchers understand how cyber conflicts evolve over time.
 
-### Mathematical Model
+### Key Features
 
-The system is governed by the following equations:
+- **🎓 Educational Focus**: Comprehensive explanations of mathematical concepts, stability theory, and numerical methods
+- **🧮 Mathematical Rigor**: Based on Lotka-Volterra equations adapted for cyber warfare scenarios
+- **🎮 Interactive Scenarios**: Pre-built scenarios for different cyber conflict situations
+- **📊 Rich Visualizations**: Time series plots, 3D phase space visualization, and stability analysis
+- **🔧 Flexible Controls**: Simple scenario builder and advanced parameter fine-tuning
+- **🚀 Guided Learning**: Step-by-step tour system for new users
+- **⚙️ Multiple Solvers**: Various numerical methods with educational guidance
+- **📱 Responsive Design**: Works on desktop, tablet, and mobile devices
+
+## 🧠 Mathematical Foundation
+
+The simulation is built on a four-variable Lotka-Volterra system representing:
+
+### Variables
+- **x(t)**: Defender Capability - Strength of cybersecurity defenses
+- **y(t)**: Attacker Capability - Strength of cyber attack capabilities  
+- **z(t)**: System Vulnerability - Exploitable weaknesses in the system
+- **u(t)**: Threat Intelligence - Actionable threat information available
+
+### Differential Equations
+
+The system is governed by these coupled differential equations:
 
 ```
-dx/dt = αx + ρu - βxy - δxz
-dy/dt = γy + εyz - ηxy - σuy
+dx/dt = αx - βxy - δxz + ρxu
+dy/dt = γy - ηxy + εyz - σyu  
 dz/dt = θy - λx - μz
 du/dt = νx - ξu
 ```
 
-Where α, β, γ, δ, ε, η, θ, λ, μ, ν, ξ, ρ, σ are configurable parameters.
+Where:
+- **α**: Defender natural growth rate
+- **β**: Defender-attacker interaction strength
+- **γ**: Attacker natural growth rate
+- **δ**: Vulnerability impact on defenders
+- **ε**: Attacker-vulnerability synergy
+- **η**: Defender countermeasure effectiveness
+- **θ**: Vulnerability generation by attackers
+- **λ**: Vulnerability mitigation by defenders
+- **μ**: Natural vulnerability decay
+- **ν**: Intelligence generation by defenders
+- **ξ**: Intelligence decay rate
+- **ρ**: Intelligence-defender synergy
+- **σ**: Intelligence effectiveness against attackers
 
-## Architecture
-
-```
-cyber-conflict-sim/
-├── backend/
-│   ├── app/
-│   │   ├── main.py           # FastAPI application
-│   │   ├── models/           # Pydantic models
-│   │   ├── solver/           # Mathematical solver
-│   │   └── utils/            # Utilities and exceptions
-│   ├── requirements.txt      # Python dependencies
-│   └── Dockerfile           # Backend container
-├── docker-compose.yml       # Local development
-└── README.md
-```
-
-## Quick Start
+## 🚀 Quick Start
 
 ### Prerequisites
 
-- Docker and Docker Compose
-- Git
+- [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/)
+- Or: [Node.js](https://nodejs.org/) (v18+) and [Python](https://python.org/) (v3.8+)
 
-### Local Development
+### Using Docker (Recommended)
 
 1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd attack-a-litics
-   ```
+```bash
+git clone https://github.com/your-username/attack-a-litics.git
+cd attack-a-litics
+```
 
-2. **Start the backend**
-   ```bash
-   docker-compose up --build
-   ```
+2. **Start the application**
+```bash
+docker-compose up
+```
 
-3. **Access the API**
-   - API: http://localhost:8000
-   - Health check: http://localhost:8000/health
-   - Documentation: http://localhost:8000/docs
-   - Alternative docs: http://localhost:8000/redoc
+3. **Access the application**
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8000
+- API Documentation: http://localhost:8000/docs
 
 ### Production Deployment
 
-#### Railway (Backend)
+For production deployment to Railway (backend) and Vercel (frontend), see the [DEPLOYMENT.md](./DEPLOYMENT.md) guide.
 
-1. Connect your GitHub repository to Railway
-2. Set environment variables:
-   ```
-   PORT=8000
-   PYTHONUNBUFFERED=1
-   ```
-3. Deploy from the `backend` directory
+### Local Development Setup
 
-#### Docker Hub
-
+#### Backend Setup
 ```bash
-# Build and push backend image
-docker build -t your-username/attack-a-litics-backend ./backend
-docker push your-username/attack-a-litics-backend
+cd backend
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 8000
 ```
 
-## API Usage
+#### Frontend Setup
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-### Simulate Endpoint
+## 📚 User Guide
 
-**POST** `/simulate`
+### Getting Started
 
-Runs a cyber warfare simulation with the given parameters.
+1. **Take the Tour**: New users automatically see a guided tour explaining the interface
+2. **Choose a Scenario**: Start with pre-built scenarios like "Balanced Conflict" or "APT Campaign"
+3. **Adjust Parameters**: Use the high-level controls or switch to advanced mode for fine-tuning
+4. **Select Solver**: Choose the numerical method (RK45 recommended for beginners)
+5. **Run Simulation**: Click "Simulate" to generate results
+6. **Explore Results**: Examine time series, phase space, and stability analysis
 
-#### Request Body
+### Understanding the Interface
 
+#### Scenario Builder
+- **Conflict Intensity**: Controls the aggressiveness of attacker-defender interactions
+- **Defender Advantage**: Adjusts how effectively defenses counter attacks
+- **System Resilience**: Determines recovery speed and threat intelligence processing
+
+#### Visualization Components
+- **Time Series Plot**: Shows how variables evolve over time with annotations
+- **3D Phase Plot**: Visualizes system trajectory in phase space
+- **Mathematical Analysis**: Displays stability analysis, eigenvalues, and Jacobian matrix
+
+### Pre-built Scenarios
+
+#### Beginner Scenarios
+- **Balanced Conflict**: Typical cyber warfare with moderate capabilities
+- **System Hardening**: Demonstrates proactive security measures
+
+#### Intermediate Scenarios  
+- **Effective Intelligence**: Shows how threat intelligence improves defense
+- **Defensive Failure**: Illustrates inadequate defensive measures
+
+#### Advanced Scenarios
+- **APT Campaign**: Models sophisticated persistent threats
+- **Oscillating Conflict**: Demonstrates cyclical advantage shifts
+
+### Solver Selection Guide
+
+| Solver | Best For | Speed | Accuracy |
+|--------|----------|-------|----------|
+| **RK45** | General use, beginners | Fast | Good |
+| **DOP853** | High precision needs | Slow | Excellent |
+| **RK23** | Quick exploration | Very Fast | Fair |
+| **Radau** | Stiff systems | Medium | Good |
+| **BDF** | Very stiff systems | Slow | Good |
+| **LSODA** | Automatic switching | Medium | Good |
+
+### Interpreting Results
+
+#### Time Series Analysis
+- **Rising lines**: Capabilities/vulnerabilities increasing
+- **Falling lines**: Capabilities/vulnerabilities decreasing
+- **Oscillations**: Cyclical behavior between sides
+- **Convergence**: Variables reaching stable equilibrium
+- **Crossovers**: Advantage shifts between attackers/defenders
+
+#### Phase Space Visualization
+- **Trajectory shape**: Reveals system behavior patterns
+- **Color gradient**: Shows time progression (blue → yellow)
+- **Start/end points**: Green circle (start), red diamond (end)
+- **Spiral patterns**: Indicate oscillatory behavior
+- **Straight lines**: Suggest monotonic changes
+
+#### Stability Analysis
+- **Stable Node**: System reaches equilibrium naturally
+- **Unstable Node**: System becomes increasingly chaotic
+- **Saddle Point**: Outcome depends on initial conditions
+- **Spiral Sink**: Oscillating convergence to stability
+- **Spiral Source**: Oscillating divergence from stability
+
+## 🏗️ Architecture
+
+### Frontend (Next.js)
+```
+frontend/
+├── src/
+│   ├── components/
+│   │   ├── education/          # Educational components
+│   │   │   ├── ConceptExplainer.js
+│   │   │   ├── SolverGuide.js
+│   │   │   ├── StabilityEducation.js
+│   │   │   └── GuidedTour.js
+│   │   ├── controls/           # Control interfaces
+│   │   │   ├── ScenarioBuilder.js
+│   │   │   ├── SolverSettings.js
+│   │   │   └── ParameterControls.js
+│   │   └── visualizations/     # Visualization components
+│   │       ├── AnnotatedTimeSeries.js
+│   │       ├── EducationalPhasePlot.js
+│   │       └── InteractiveAnalysis.js
+│   ├── pages/
+│   │   └── index.js            # Main application page
+│   └── utils/
+│       ├── api.js              # API client
+│       ├── constants.js        # Application constants
+│       ├── explanationData.js  # Educational content
+│       └── scenarioPresets.js  # Pre-built scenarios
+├── Dockerfile
+├── Dockerfile.dev
+└── package.json
+```
+
+### Backend (FastAPI)
+```
+backend/
+├── app/
+│   ├── main.py                 # FastAPI application
+│   ├── models/                 # Data models
+│   ├── solver/                 # Numerical solver
+│   └── utils/                  # Utility functions
+├── requirements.txt
+└── Dockerfile
+```
+
+### Key Technologies
+
+#### Frontend
+- **Framework**: Next.js 14 with React 18
+- **Styling**: Tailwind CSS with custom cyber theme
+- **Visualizations**: Plotly.js for interactive plots
+- **Icons**: Lucide React icons
+- **State Management**: React hooks and context
+
+#### Backend
+- **Framework**: FastAPI with async/await
+- **Numerical Computing**: NumPy, SciPy
+- **Symbolic Math**: SymPy for analytical computations
+- **Validation**: Pydantic models
+- **Documentation**: Automatic OpenAPI/Swagger docs
+
+## 🔧 Development
+
+### Adding New Scenarios
+
+1. **Define the scenario** in `frontend/src/utils/scenarioPresets.js`:
+```javascript
+newScenario: {
+  name: "Scenario Name",
+  description: "Brief description",
+  educational: "What this scenario teaches",
+  parameters: {
+    // Parameter values
+  },
+  expectedOutcome: "Expected stability type",
+  keyInsights: ["Insight 1", "Insight 2"]
+}
+```
+
+2. **Add to category** in `SCENARIO_CATEGORIES`
+3. **Test the scenario** through the interface
+
+### Adding Educational Content
+
+1. **Add explanations** to `frontend/src/utils/explanationData.js`
+2. **Create new components** in `components/education/`
+3. **Update the main page** to include new content
+
+### Customizing Visualizations
+
+1. **Modify plot configurations** in `utils/constants.js`
+2. **Add new plot types** in `components/visualizations/`
+3. **Update styling** in `styles/globals.css`
+
+### Export Functionality
+
+The application includes comprehensive export capabilities:
+
+- **Excel Export**: Complete simulation data with multiple sheets
+- **CSV Export**: Time series, analysis, and Jacobian matrix data
+- **Image Export**: High-quality PNG and SVG visualizations
+- **Educational Reports**: Formatted reports with insights and recommendations
+
+### Mathematical Rendering
+
+Equations are rendered using KaTeX for professional mathematical notation:
+- Real-time equation rendering
+- Mobile-responsive equation display
+- LaTeX syntax support
+- Accessible mathematical content
+
+## 📊 API Documentation
+
+The backend provides a RESTful API for simulation and analysis:
+
+### Endpoints
+
+#### `GET /`
+Returns API information and available endpoints.
+
+#### `GET /health`
+Health check endpoint for monitoring.
+
+#### `POST /simulate`
+Runs a simulation with given parameters.
+
+**Request Body:**
 ```json
 {
   "alpha": 0.1,
@@ -121,166 +327,179 @@ Runs a cyber warfare simulation with the given parameters.
 }
 ```
 
-#### Response
-
+**Response:**
 ```json
 {
   "time_series": {
-    "t": [0, 0.1, 0.2, ...],
-    "x": [100, 99.5, ...],
-    "y": [50, 51.2, ...],
-    "z": [30, 29.8, ...],
-    "u": [20, 20.5, ...]
+    "t": [0.0, 0.1, ...],
+    "x": [100.0, 99.8, ...],
+    "y": [50.0, 49.9, ...],
+    "z": [30.0, 29.9, ...],
+    "u": [20.0, 20.1, ...]
   },
   "jacobian": [[...], [...], [...], [...]],
-  "eigenvalues": [1.2, -0.5, {"real": 0.1, "imag": 0.3}],
-  "stability": "spiral sink",
-  "parameters": {...},
+  "eigenvalues": [-0.05, -0.03, -0.11, -0.09],
+  "stability": "stable node",
+  "parameters": { ... },
   "metadata": {
-    "simulation_time": 24,
-    "resolution": 0.1,
-    "solver_method": "RK45"
+    "simulation_time": 24.0,
+    "data_points": 241,
+    "solver_method": "RK45",
+    "solver_success": true
   }
 }
 ```
 
-### Example Usage
+## 🚀 Deployment
 
+### Production Deployment
+
+#### Frontend (Vercel)
 ```bash
-# Test with default parameters
-curl -X POST http://localhost:8000/simulate \
-  -H "Content-Type: application/json" \
-  -d '{}'
-
-# Test with custom parameters
-curl -X POST http://localhost:8000/simulate \
-  -H "Content-Type: application/json" \
-  -d '{
-    "alpha": 0.15,
-    "beta": 0.03,
-    "time_span": 12.0,
-    "solver_method": "DOP853"
-  }'
+# Build and deploy to Vercel
+npm run build
+vercel deploy --prod
 ```
 
-## Parameters
-
-### Differential Equation Parameters
-
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| α (alpha) | Defender growth rate | 0.1 |
-| β (beta) | Defender-attacker interaction | 0.02 |
-| γ (gamma) | Attacker growth rate | 0.08 |
-| δ (delta) | Defender vulnerability interaction | 0.015 |
-| ε (epsilon) | Attacker-vulnerability synergy | 0.01 |
-| η (eta) | Attacker-defender conflict | 0.025 |
-| θ (theta) | Vulnerability generation by attackers | 0.03 |
-| λ (lambda) | Vulnerability mitigation by defenders | 0.05 |
-| μ (mu) | Natural vulnerability decay | 0.02 |
-| ν (nu) | Intelligence generation by defenders | 0.04 |
-| ξ (xi) | Intelligence decay rate | 0.03 |
-| ρ (rho) | Intelligence-defender synergy | 0.02 |
-| σ (sigma) | Intelligence-attacker counter | 0.01 |
-
-### Initial Conditions
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| x0 | Initial defender capability | 100.0 |
-| y0 | Initial attacker capability | 50.0 |
-| z0 | Initial system vulnerability | 30.0 |
-| u0 | Initial threat intelligence | 20.0 |
-
-### Simulation Parameters
-
-| Parameter | Description | Default | Range |
-|-----------|-------------|---------|-------|
-| time_span | Simulation time in hours | 24.0 | (0, 168] |
-| resolution | Time step resolution | 0.1 | (0, 1.0] |
-| solver_method | ODE solver method | "RK45" | RK45, DOP853, Radau, BDF, LSODA |
-
-## Stability Analysis
-
-The system performs stability analysis by:
-
-1. Computing the 4×4 Jacobian matrix at the final state
-2. Calculating eigenvalues
-3. Classifying stability based on eigenvalue properties:
-   - **Stable node**: All real eigenvalues < 0
-   - **Unstable node**: All real eigenvalues > 0
-   - **Saddle point**: Mixed positive/negative real eigenvalues
-   - **Spiral sink**: Complex eigenvalues with negative real parts
-   - **Spiral source**: Complex eigenvalues with positive real parts
-   - **Center**: Pure imaginary eigenvalues
-
-## Development
-
-### Running Tests
-
+#### Backend (Railway)
 ```bash
-# Start the backend
-docker-compose up -d
-
-# Test the API
-curl http://localhost:8000/health
-
-# Run a simulation
-curl -X POST http://localhost:8000/simulate \
-  -H "Content-Type: application/json" \
-  -d '{}'
+# Deploy to Railway
+railway login
+railway project create
+railway up
 ```
 
-### Development with Volume Mounting
-
-The docker-compose.yml includes volume mounting for development:
+### Docker Production
 
 ```bash
-# Start with auto-reload
-docker-compose up --build
+# Build production images
+docker-compose -f docker-compose.prod.yml build
 
-# Make changes to backend/app/ files
-# The container will automatically reload
+# Deploy with production configuration
+docker-compose -f docker-compose.prod.yml up -d
 ```
 
-### Monitoring
+### Environment Variables
 
-- Health check endpoint: `/health`
-- Logs: `docker-compose logs -f backend`
-- Container status: `docker-compose ps`
+#### Frontend
+- `NEXT_PUBLIC_BACKEND_URL`: Backend API URL for client-side requests
+- `BACKEND_URL`: Backend API URL for server-side requests
+- `NEXT_TELEMETRY_DISABLED`: Disable Next.js telemetry
 
-## Troubleshooting
+#### Backend
+- `CORS_ORIGINS`: Allowed CORS origins
+- `LOG_LEVEL`: Logging level (DEBUG, INFO, WARNING, ERROR)
+
+## 📖 Educational Content
+
+### Mathematical Concepts Covered
+
+1. **Differential Equations**: Systems of coupled ODEs
+2. **Stability Analysis**: Linear stability and eigenvalue analysis
+3. **Phase Space**: Multi-dimensional system visualization
+4. **Numerical Methods**: Various ODE solvers and their properties
+5. **Bifurcation Theory**: Parameter sensitivity and critical points
+
+### Learning Objectives
+
+After using Attack-a-litics, learners will understand:
+- How mathematical models represent complex systems
+- The relationship between system parameters and behavior
+- How to interpret stability analysis results
+- When to use different numerical solving methods
+- How cybersecurity scenarios can be analyzed quantitatively
+
+### Target Audience
+
+- **Cybersecurity Students**: Learning about threat modeling and defense strategies
+- **Security Professionals**: Understanding systematic approaches to cyber defense
+- **Researchers**: Exploring mathematical models of cyber conflict
+- **Educators**: Teaching cybersecurity concepts through simulation
+- **Policy Makers**: Gaining insights into cyber conflict dynamics
+
+## 🔧 Troubleshooting
 
 ### Common Issues
 
-1. **Port 8000 already in use**
-   ```bash
-   # Change port in docker-compose.yml
-   ports:
-     - "8001:8000"
-   ```
+#### Backend Shows as Unhealthy
+- **Cause**: Backend container not running or API not responding
+- **Solution**: Check `docker-compose ps` and `docker-compose logs backend`
 
-2. **Container fails to start**
-   ```bash
-   # Check logs
-   docker-compose logs backend
-   
-   # Rebuild container
-   docker-compose build --no-cache backend
-   ```
+#### Simulation Fails with "Solver Error"
+- **Cause**: Parameters may cause numerical instability
+- **Solution**: Try different solver (Radau for stiff systems) or adjust parameters
 
-3. **Numerical instability**
-   - Reduce time_span or increase resolution
-   - Try different solver methods (DOP853, Radau)
-   - Check parameter values for extreme interactions
+#### Performance Issues
+- **Cause**: Long simulation time or high resolution
+- **Solution**: Reduce time span or increase resolution step size
 
-### Support
+#### Visualization Not Loading
+- **Cause**: Missing or invalid simulation data
+- **Solution**: Check browser console for errors and ensure simulation completed
 
-For issues and questions:
-- Check the logs: `docker-compose logs backend`
-- Verify container health: `curl http://localhost:8000/health`
-- Review parameter constraints in the API documentation
+### Performance Optimization
 
-## License
+1. **Reduce simulation time**: Use shorter time spans for exploration
+2. **Adjust resolution**: Higher resolution values compute faster
+3. **Choose appropriate solver**: RK23 for speed, DOP853 for accuracy
+4. **Use scenario presets**: Pre-configured for stability and performance
 
-This project is licensed under the MIT License.
+### Getting Help
+
+1. **Check the logs**: `docker-compose logs` for container issues
+2. **Review documentation**: API docs at http://localhost:8000/docs
+3. **Report issues**: GitHub issues for bugs and feature requests
+4. **Community support**: Discussions and examples in the repository
+
+## 🤝 Contributing
+
+We welcome contributions to Attack-a-litics! Here's how to get started:
+
+### Development Setup
+
+1. **Fork and clone** the repository
+2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
+3. **Make your changes** with appropriate tests
+4. **Submit a pull request** with a clear description
+
+### Contribution Guidelines
+
+- Follow existing code style and conventions
+- Add tests for new features
+- Update documentation as needed
+- Ensure all tests pass before submitting
+- Write clear, descriptive commit messages
+
+### Areas for Contribution
+
+- **New scenarios**: Additional cyber conflict situations
+- **Visualization improvements**: Enhanced plots and analysis tools
+- **Educational content**: More explanations and learning materials
+- **Performance optimizations**: Faster simulation and rendering
+- **Accessibility**: Improved user experience for all users
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- **Lotka-Volterra Equations**: Foundation for predator-prey dynamics
+- **SciPy**: Numerical computing library for Python
+- **Plotly.js**: Interactive visualization library
+- **Next.js**: React framework for web applications
+- **FastAPI**: Modern Python web framework
+- **Tailwind CSS**: Utility-first CSS framework
+
+## 📞 Support
+
+- **Documentation**: In-app guided tour and explanations
+- **API Reference**: http://localhost:8000/docs
+- **Issues**: GitHub issue tracker
+- **Discussions**: GitHub discussions for questions and ideas
+
+---
+
+**Attack-a-litics** - Making cyber conflict dynamics accessible through interactive mathematical simulation.
+
+Built with ❤️ for the cybersecurity education community.
