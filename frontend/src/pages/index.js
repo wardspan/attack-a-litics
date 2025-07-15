@@ -46,6 +46,8 @@ export default function Home() {
   const [backendStatus, setBackendStatus] = useState('unknown');
   const [currentScenario, setCurrentScenario] = useState(null);
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [simulationKey, setSimulationKey] = useState(0); // Force re-render key
+  const [isSimulating, setIsSimulating] = useState(false); // Prevent double-clicks
   
   // Tour management
   const { showTour, startTour, endTour, isNewUser, markUserAsVisited } = useTour();
@@ -114,11 +116,28 @@ export default function Home() {
     setError(null);
     setLoadingState(LOADING_STATES.IDLE);
     setCurrentScenario(null);
-  }, []);
+    setSimulationKey(prev => prev + 1); // Force re-render of all components
+    setIsSimulating(false); // Reset simulation flag
+    
+    // Track reset action
+    track('simulation_reset', {
+      previous_scenario: currentScenario?.name || 'custom'
+    });
+  }, [currentScenario]);
 
   const handleSimulate = useCallback(async () => {
+    // Prevent double-clicks/rapid requests
+    if (isSimulating) {
+      return;
+    }
+    
+    setIsSimulating(true);
+    
+    // Clear previous state before starting new simulation
     setLoadingState(LOADING_STATES.LOADING);
     setError(null);
+    setSimulationData(null); // Clear previous simulation data
+    setSimulationKey(prev => prev + 1); // Force re-render of all components
     
     // Track simulation start
     track('simulation_started', {
@@ -128,6 +147,8 @@ export default function Home() {
     });
     
     try {
+      // Add small delay to prevent rapid consecutive requests
+      await new Promise(resolve => setTimeout(resolve, 100));
       const result = await simulateSystem(parameters);
       
       if (result.success) {
@@ -160,8 +181,10 @@ export default function Home() {
       track('simulation_error', {
         error: err.message
       });
+    } finally {
+      setIsSimulating(false); // Reset simulation flag
     }
-  }, [parameters, currentScenario]);
+  }, [parameters, currentScenario, isSimulating]);
 
   const handleTourComplete = useCallback((scenarioId) => {
     markUserAsVisited();
@@ -239,10 +262,10 @@ export default function Home() {
                 <div className="flex items-center space-x-2" data-tour="simulate">
                   <button
                     onClick={handleSimulate}
-                    disabled={isLoading || backendStatus !== 'healthy'}
+                    disabled={isLoading || isSimulating || backendStatus !== 'healthy'}
                     className="button-primary flex items-center space-x-2"
                   >
-                    {isLoading ? (
+                    {isLoading || isSimulating ? (
                       <>
                         <Pause size={16} />
                         <span>Running...</span>
@@ -257,7 +280,7 @@ export default function Home() {
                   
                   <button
                     onClick={handleReset}
-                    disabled={isLoading}
+                    disabled={isLoading || isSimulating}
                     className="button-secondary flex items-center space-x-1"
                   >
                     <RefreshCw size={14} />
@@ -344,6 +367,7 @@ export default function Home() {
               {/* Time Series Plot */}
               <ErrorBoundary fallbackMessage="Failed to load time series visualization">
                 <AnnotatedTimeSeries
+                  key={`timeseries-${simulationKey}`}
                   data={simulationData}
                   loading={isLoading}
                   error={hasError ? error : null}
@@ -357,6 +381,7 @@ export default function Home() {
               <div className="main-visualization-grid grid grid-cols-1 xl:grid-cols-2 gap-8">
                 <ErrorBoundary fallbackMessage="Failed to load phase space visualization">
                   <EducationalPhasePlot
+                    key={`phaseplot-${simulationKey}`}
                     data={simulationData}
                     loading={isLoading}
                     error={hasError ? error : null}
@@ -366,6 +391,7 @@ export default function Home() {
                 
                 <ErrorBoundary fallbackMessage="Failed to load mathematical analysis">
                   <InteractiveAnalysis
+                    key={`analysis-${simulationKey}`}
                     data={simulationData}
                     loading={isLoading}
                     error={hasError ? error : null}
