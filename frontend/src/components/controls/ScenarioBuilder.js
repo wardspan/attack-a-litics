@@ -113,13 +113,22 @@ const ScenarioBuilder = ({
     return descMap[control];
   };
 
+  const getControlLabel = (control) => {
+    const labelMap = {
+      conflictIntensity: 'Conflict Intensity',
+      defenderAdvantage: 'Defender Advantage', 
+      systemResilience: 'System Resilience'
+    };
+    return labelMap[control] || control;
+  };
+
   const ControlSlider = ({ control, value, onChange }) => (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           {getControlIcon(control)}
-          <span className="text-sm font-medium text-white capitalize">
-            {control.replace(/([A-Z])/g, ' $1').trim()}
+          <span className="text-sm font-medium text-white">
+            {getControlLabel(control)}
           </span>
         </div>
         <span className="text-sm text-gray-400">

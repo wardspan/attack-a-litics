@@ -1,6 +1,13 @@
 import axios from 'axios';
 
-const API_BASE_URL = '/api';
+// Use the environment variable for production, fallback to proxy for local development
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api';
+
+console.log('API Configuration:', {
+  NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+  API_BASE_URL,
+  NODE_ENV: process.env.NODE_ENV
+});
 
 // Create axios instance with default config
 const api = axios.create({
@@ -14,7 +21,13 @@ const api = axios.create({
 // Request interceptor for logging
 api.interceptors.request.use(
   (config) => {
-    console.log(`API Request: ${config.method?.toUpperCase()} ${config.url}`);
+    console.log(`API Request: ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`);
+    console.log('Request config:', {
+      baseURL: config.baseURL,
+      url: config.url,
+      method: config.method,
+      headers: config.headers
+    });
     return config;
   },
   (error) => {
@@ -26,11 +39,20 @@ api.interceptors.request.use(
 // Response interceptor for error handling
 api.interceptors.response.use(
   (response) => {
-    console.log(`API Response: ${response.status} ${response.config.url}`);
+    console.log(`API Response: ${response.status} ${response.config.baseURL}${response.config.url}`);
+    console.log('Response data:', response.data);
     return response;
   },
   (error) => {
     console.error('API Response Error:', error);
+    console.error('Error details:', {
+      baseURL: error.config?.baseURL,
+      url: error.config?.url,
+      method: error.config?.method,
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      data: error.response?.data
+    });
     
     // Handle different error types
     if (error.response) {
@@ -48,6 +70,8 @@ api.interceptors.response.use(
         } else if (data.detail?.message) {
           errorMessage = data.detail.message;
         }
+      } else if (status === 404) {
+        errorMessage = 'API endpoint not found. Please check the backend configuration.';
       }
       
       error.userMessage = errorMessage;

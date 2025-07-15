@@ -347,6 +347,7 @@ async headers() {
    - **Solution**: Health check timeout increased to 600s, uses Railway PORT variable
    - **Test**: `curl https://your-railway-url.railway.app/health`
    - **Debug**: Check Railway logs for startup issues: `railway logs`
+   - **Note**: Railway dashboard may show "unhealthy" even when endpoints work correctly
 
 7. **API Routing Issues**
    - **Error**: `/api/simulate` returns 404 or API calls fail
