@@ -10,4 +10,4 @@ restartPolicyMaxRetries = 3
 
 [env]
 LOG_LEVEL = "INFO"
-CORS_ORIGINS = "https://attack-a-litics.vercel.app,https://attack-a-litics-*.vercel.app"
+CORS_ORIGINS = "https://attack-a-litics.vercel.app,https://attack-a-litics-*.vercel.app,https://attack-a-litics-production.up.railway.app"

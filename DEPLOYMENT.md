@@ -97,8 +97,8 @@ This guide provides step-by-step instructions for deploying Attack-a-litics to p
    
    Edit `.env.local`:
    ```env
-   NEXT_PUBLIC_BACKEND_URL=https://attack-a-litics-backend.railway.app
-   BACKEND_URL=https://attack-a-litics-backend.railway.app
+   NEXT_PUBLIC_BACKEND_URL=https://attack-a-litics-production.up.railway.app
+   BACKEND_URL=https://attack-a-litics-production.up.railway.app
    NEXT_TELEMETRY_DISABLED=1
    ```
 
@@ -131,10 +131,10 @@ This guide provides step-by-step instructions for deploying Attack-a-litics to p
 4. **Set Environment Variables**
    ```bash
    vercel env add NEXT_PUBLIC_BACKEND_URL
-   # Enter: https://attack-a-litics-backend.railway.app
+   # Enter: https://attack-a-litics-production.up.railway.app
    
    vercel env add BACKEND_URL
-   # Enter: https://attack-a-litics-backend.railway.app
+   # Enter: https://attack-a-litics-production.up.railway.app
    
    vercel env add NEXT_TELEMETRY_DISABLED
    # Enter: 1
@@ -179,7 +179,7 @@ This guide provides step-by-step instructions for deploying Attack-a-litics to p
 
 1. **Backend Health**
    ```bash
-   curl https://attack-a-litics-backend.railway.app/health
+   curl https://attack-a-litics-production.up.railway.app/health
    ```
    Should return: `{"status": "healthy"}`
 
@@ -348,7 +348,13 @@ async headers() {
    - **Test**: `curl https://your-railway-url.railway.app/health`
    - **Debug**: Check Railway logs for startup issues: `railway logs`
 
-7. **Environment Variables**
+7. **API Routing Issues**
+   - **Error**: `/api/simulate` returns 404 or API calls fail
+   - **Solution**: Ensure `NEXT_PUBLIC_BACKEND_URL` is set correctly in Vercel
+   - **Test**: Check that backend health endpoint is accessible
+   - **Debug**: Verify API rewrites in Next.js config use correct backend URL
+
+8. **Environment Variables**
    - **Error**: Application fails to start or CORS issues
    - **Solution**: Set required environment variables in Railway dashboard
    - **Required**: `LOG_LEVEL=INFO`, `CORS_ORIGINS=https://your-frontend-url`
@@ -363,7 +369,7 @@ railway logs
 vercel logs
 
 # Test API locally
-curl -X POST https://attack-a-litics-backend.railway.app/simulate \
+curl -X POST https://attack-a-litics-production.up.railway.app/simulate \
   -H "Content-Type: application/json" \
   -d '{"alpha": 0.1, "beta": 0.02, "gamma": 0.08, "delta": 0.015, "epsilon": 0.01, "eta": 0.025, "theta": 0.03, "lambda": 0.05, "mu": 0.02, "nu": 0.04, "xi": 0.03, "rho": 0.02, "sigma": 0.01, "x0": 100, "y0": 50, "z0": 30, "u0": 20, "time_span": 24, "resolution": 0.1, "solver_method": "RK45"}'
 ```

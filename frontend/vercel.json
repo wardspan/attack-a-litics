@@ -1,12 +1,7 @@
 {
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "https://attack-a-litics-backend.railway.app/$1"
-    }
-  ],
   "env": {
-    "NEXT_PUBLIC_BACKEND_URL": "https://attack-a-litics-backend.railway.app",
+    "NEXT_PUBLIC_BACKEND_URL": "https://attack-a-litics-production.up.railway.app",
+    "BACKEND_URL": "https://attack-a-litics-production.up.railway.app",
     "NEXT_TELEMETRY_DISABLED": "1"
   }
 }

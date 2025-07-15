@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { 
   ChevronLeft, 
   ChevronRight, 
@@ -29,9 +30,9 @@ const GuidedTour = ({ isOpen, onClose, onStartSimulation }) => {
       content: `This simulation helps you understand cyber conflict dynamics using mathematical models.
       
       You'll explore how defenders and attackers interact in cyberspace through:
-      • Interactive parameter controls
-      • Real-time visualizations
-      • Mathematical stability analysis
+      - Interactive parameter controls
+      - Real-time visualizations
+      - Mathematical stability analysis
       
       Let's take a quick tour to get you started!`,
       icon: <Lightbulb className="text-cyber-green" size={24} />,
@@ -42,10 +43,10 @@ const GuidedTour = ({ isOpen, onClose, onStartSimulation }) => {
       title: 'Choose Your Scenario',
       content: `Start with pre-built scenarios to understand different cyber conflict situations:
       
-      • **Balanced Conflict**: Typical cyber warfare dynamics
-      • **APT Campaign**: Advanced persistent threat simulation
-      • **Effective Intelligence**: How threat intel improves defense
-      • **System Hardening**: Proactive security measures
+      - **Balanced Conflict**: Typical cyber warfare dynamics
+      - **APT Campaign**: Advanced persistent threat simulation
+      - **Effective Intelligence**: How threat intel improves defense
+      - **System Hardening**: Proactive security measures
       
       Each scenario teaches different concepts and includes explanations.`,
       icon: <Target className="text-cyber-blue" size={24} />,
@@ -57,9 +58,9 @@ const GuidedTour = ({ isOpen, onClose, onStartSimulation }) => {
       title: 'Adjust Parameters',
       content: `Control the simulation with three main settings:
       
-      • **Conflict Intensity**: How aggressive the interactions are
-      • **Defender Advantage**: How much advantage defenders have
-      • **System Resilience**: How quickly the system recovers
+      - **Conflict Intensity**: How aggressive the interactions are
+      - **Defender Advantage**: How much advantage defenders have
+      - **System Resilience**: How quickly the system recovers
       
       Advanced users can fine-tune individual parameters below.`,
       icon: <Settings className="text-cyber-purple" size={24} />,
@@ -71,9 +72,9 @@ const GuidedTour = ({ isOpen, onClose, onStartSimulation }) => {
       title: 'Select Solver Method',
       content: `Choose how the mathematical equations are solved:
       
-      • **RK45**: Recommended for beginners (good balance)
-      • **DOP853**: High accuracy for sensitive analysis
-      • **Radau**: Best for stiff/difficult systems
+      - **RK45**: Recommended for beginners (good balance)
+      - **DOP853**: High accuracy for sensitive analysis
+      - **Radau**: Best for stiff/difficult systems
       
       Don't worry - RK45 works great for most scenarios!`,
       icon: <Settings className="text-cyber-green" size={24} />,
@@ -86,10 +87,10 @@ const GuidedTour = ({ isOpen, onClose, onStartSimulation }) => {
       content: `Once you've set your parameters, click the Simulate button to run the analysis.
       
       The simulation will:
-      • Solve the differential equations
-      • Generate time series data
-      • Compute stability analysis
-      • Create visualizations
+      - Solve the differential equations
+      - Generate time series data
+      - Compute stability analysis
+      - Create visualizations
       
       Results appear in real-time below!`,
       icon: <Play className="text-cyber-blue" size={24} />,
@@ -101,9 +102,9 @@ const GuidedTour = ({ isOpen, onClose, onStartSimulation }) => {
       title: 'Explore the Results',
       content: `After simulation, you'll see three main visualizations:
       
-      • **Time Series**: How variables change over time
-      • **3D Phase Plot**: System behavior in phase space
-      • **Stability Analysis**: Mathematical analysis of equilibrium
+      - **Time Series**: How variables change over time
+      - **3D Phase Plot**: System behavior in phase space
+      - **Stability Analysis**: Mathematical analysis of equilibrium
       
       Each includes explanations to help you understand the results.`,
       icon: <BarChart3 className="text-cyber-green" size={24} />,
@@ -115,10 +116,10 @@ const GuidedTour = ({ isOpen, onClose, onStartSimulation }) => {
       title: 'Keep Learning',
       content: `Look for these educational features throughout the interface:
       
-      • **Info panels**: Click "What does this show?" for explanations
-      • **Tooltips**: Hover over elements for quick help
-      • **Concept explanations**: Learn about mathematical concepts
-      • **Scenario comparisons**: Try different scenarios to see differences
+      - **Info panels**: Click "What does this show?" for explanations
+      - **Tooltips**: Hover over elements for quick help
+      - **Concept explanations**: Learn about mathematical concepts
+      - **Scenario comparisons**: Try different scenarios to see differences
       
       Ready to start exploring?`,
       icon: <BookOpen className="text-cyber-purple" size={24} />,
@@ -183,8 +184,19 @@ const GuidedTour = ({ isOpen, onClose, onStartSimulation }) => {
 
         {/* Content */}
         <div className="p-6">
-          <div className="text-gray-300 leading-relaxed whitespace-pre-line">
-            {currentStepData.content}
+          <div className="text-gray-300 leading-relaxed prose prose-invert prose-sm max-w-none">
+            <ReactMarkdown
+              components={{
+                // Custom components for better styling
+                strong: ({ children }) => <strong className="text-white font-semibold">{children}</strong>,
+                em: ({ children }) => <em className="text-cyber-blue">{children}</em>,
+                ul: ({ children }) => <ul className="list-disc list-inside space-y-1 my-2">{children}</ul>,
+                li: ({ children }) => <li className="text-gray-300">{children}</li>,
+                p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+              }}
+            >
+              {currentStepData.content}
+            </ReactMarkdown>
           </div>
         </div>
 

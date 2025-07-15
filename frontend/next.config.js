@@ -15,10 +15,11 @@ const nextConfig = {
   
   // API rewrites
   async rewrites() {
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.BACKEND_URL || 'http://localhost:8000';
     return [
       {
         source: '/api/:path*',
-        destination: `${process.env.BACKEND_URL || 'http://localhost:8000'}/:path*`,
+        destination: `${backendUrl}/:path*`,
       },
     ];
   },
@@ -66,7 +67,7 @@ const nextConfig = {
     domains: [
       'localhost',
       'attack-a-litics.vercel.app',
-      'attack-a-litics-backend.railway.app'
+      'attack-a-litics-production.up.railway.app'
     ],
   },
   
